@@ -51,7 +51,7 @@ public class GuiDialogInteract extends GuiNPCInterface implements IGuiClose
 		this.dialog = dialog;
     	appendDialog(dialog);
     	ySize = 238;
-
+    	
     	wheel = this.getResource("wheel.png");
     	indicator = this.getResource("indicator.png");
     	wheelparts = new ResourceLocation[]{getResource("wheel1.png"),getResource("wheel2.png"),getResource("wheel3.png"),
@@ -64,6 +64,7 @@ public class GuiDialogInteract extends GuiNPCInterface implements IGuiClose
     	grabMouse(dialog.showWheel);
     	guiTop = (height - ySize);
     	calculateRowHeight();
+    	guiLeft += 120;
     }
     
     public void grabMouse(boolean grab){
@@ -89,7 +90,7 @@ public class GuiDialogInteract extends GuiNPCInterface implements IGuiClose
 	        float zoomed = npc.height;
 	        if(npc.width * 2 > zoomed)
 	        	zoomed = npc.width * 2;
-	        zoomed =  2 / zoomed * 40;
+	        zoomed =  1 / zoomed * 40;
 	        GL11.glScalef(-zoomed, zoomed, zoomed);
 	        GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 	        float f2 = npc.renderYawOffset;
@@ -98,17 +99,22 @@ public class GuiDialogInteract extends GuiNPCInterface implements IGuiClose
 	        float f7 = npc.rotationYawHead;
 	        float f5 = (float)(l) - i;
 	        float f6 = (float)(i1 - 50) - j;
+	        float myScale = 15;
+	        
 	        int rotation = npc.ai.orientation;
 	        npc.ai.orientation = 0;
 	        GL11.glRotatef(135F, 0.0F, 1.0F, 0.0F);
 	        RenderHelper.enableStandardItemLighting();
 	        GL11.glRotatef(-135F, 0.0F, 1.0F, 0.0F);
-	        GL11.glRotatef(-(float)Math.atan(f6 / 80F) * 20F, 1.0F, 0.0F, 0.0F);
+	      //  GL11.glRotatef(-(float)Math.atan(f6 / 80F) * 20F, 1.0F, 0.0F, 0.0F);
+	        GL11.glRotatef(20F, 0.0F, 1.0F, 0.0F);
 	        npc.renderYawOffset = 0;
-	        npc.rotationYaw = (float)Math.atan(f5 / 80F) * 40F;
-	        npc.rotationPitch = -(float)Math.atan(f6 / 80F) * 20F;
-	        npc.prevRotationYawHead = npc.rotationYawHead = npc.rotationYaw;
-	        GL11.glTranslatef(0.0F, npc.yOffset, 0.0F);
+//		        npc.rotationYaw = (float)Math.atan(f5 / 80F) * 40F;
+	        npc.rotationYaw = 12;
+//		        npc.rotationPitch = -(float)Math.atan(f6 / 80F) * 20F;
+		        npc.prevRotationYawHead = npc.rotationYawHead = npc.rotationYaw;
+	        GL11.glTranslatef(-13.0F, npc.yOffset-11, 0.0F);
+	        GL11.glScalef(myScale, myScale, myScale);
 	        RenderManager.instance.playerViewY = 180F;
 	
 	        try{

@@ -15,7 +15,7 @@ public class GuiNpcTextField extends GuiTextField{
     private static GuiNpcTextField activeTextfield = null;
 	public boolean canEdit = true;
     
-    private final int[] allowedSpecialChars = {14,211,203,205};
+    private final int[] allowedSpecialChars = {12,14,211,203,205};
 	
 	public GuiNpcTextField(int id,GuiScreen parent, FontRenderer fontRenderer,
 			int i, int j, int k, int l, String s) {
@@ -41,7 +41,11 @@ public class GuiNpcTextField extends GuiTextField{
 			return true;
 		for(int j : allowedSpecialChars)
 			if(j == i)
+			{
+				if(j==12 && id!=666)
+					return false;
 				return true;
+			}
 		
 		return false;
 	}

@@ -18,10 +18,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -43,6 +45,7 @@ import noppes.npcs.controllers.QuestData;
 import noppes.npcs.controllers.RecipeCarpentry;
 import noppes.npcs.controllers.RecipeController;
 import noppes.npcs.controllers.ServerCloneController;
+import noppes.npcs.entity.EntityCustomNpc;
 import noppes.npcs.entity.EntityNPCInterface;
 import noppes.npcs.items.ItemExcalibur;
 import noppes.npcs.items.ItemShield;
@@ -73,6 +76,48 @@ public class ServerEventsHandler {
 //		}
 //		exps.put(player.getCommandSenderName(), player.experienceTotal);
 //	}
+	
+	@SubscribeEvent
+	public void npcDealDamage(LivingAttackEvent e)
+	{
+		if(e.entityLiving instanceof EntityPlayer)
+		if(e.source.getEntity()!=null && e.source.getEntity() instanceof EntityCustomNpc)
+		{
+			EntityPlayer ep = (EntityPlayer) e.entityLiving;
+			EntityCustomNpc npc = (EntityCustomNpc) e.source.getEntity();
+			NBTTagCompound nbt = new NBTTagCompound();
+			npc.writeToNBT(nbt);
+			int purePercent = nbt.getInteger("PurePercent");
+			if(purePercent == -1)
+				return;
+			else
+			{
+				float toughness = 0;
+				
+				if(ep.getCurrentArmor(0)!=null)
+					toughness+=(float)ep.getCurrentArmor(0).getMaxDamage()-(float)ep.getCurrentArmor(0).getItemDamage();
+				
+				if(ep.getCurrentArmor(1)!=null)
+					toughness+=(float)ep.getCurrentArmor(1).getMaxDamage()-(float)ep.getCurrentArmor(1).getItemDamage();
+				
+				if(ep.getCurrentArmor(2)!=null)
+					toughness+=(float)ep.getCurrentArmor(2).getMaxDamage()-(float)ep.getCurrentArmor(2).getItemDamage();
+				
+				if(ep.getCurrentArmor(3)!=null)
+					toughness+=(float)ep.getCurrentArmor(3).getMaxDamage()-(float)ep.getCurrentArmor(3).getItemDamage();
+				
+				float purePercentFloat = (float)purePercent/100f;
+				float finalDefence = (float)ep.getTotalArmorValue()*(1f-purePercentFloat);
+				float curHealth = ep.getHealth();
+				float damage = e.ammount*(1f-Math.min(20f, Math.max(finalDefence/5f, finalDefence-e.ammount/(2f+toughness/4f)))/25f);
+				float finalDamage = (e.ammount*purePercentFloat);
+				ep.setHealth(curHealth-damage);
+				ep.attackEntityFrom(DamageSource.magic, 1f);
+				e.setCanceled(true);
+			}
+				
+		}
+	}
 
 	@SubscribeEvent
 	public void invoke(EntityInteractEvent event) {

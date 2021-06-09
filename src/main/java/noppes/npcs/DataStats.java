@@ -26,6 +26,8 @@ public class DataStats {
 	public boolean canDespawn = false;
 	
 	public Resistances resistances = new Resistances();
+	
+	public int purePercent = -1;
 
 	public boolean immuneToFire = false;
 	public boolean potionImmune = false;
@@ -79,6 +81,7 @@ public class DataStats {
 		compound.setInteger("BurstCount", burstCount);
 		compound.setInteger("ShotCount", shotCount);
 		compound.setInteger("Accuracy", accuracy);
+		compound.setInteger("PurePercent", purePercent);
 		
 		compound.setInteger("pDamage", pDamage);
 		compound.setInteger("pImpact", pImpact);
@@ -137,6 +140,7 @@ public class DataStats {
 		burstCount = compound.getInteger("BurstCount");
 		shotCount = ValueUtil.CorrectInt(compound.getInteger("ShotCount"), 1, 10);
 		accuracy = compound.getInteger("Accuracy");	
+		purePercent = compound.getInteger("PurePercent");
 		
 		pDamage = compound.getInteger("pDamage");
 		pImpact = compound.getInteger("pImpact");

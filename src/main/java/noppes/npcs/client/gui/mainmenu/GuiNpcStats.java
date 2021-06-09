@@ -76,6 +76,11 @@ public class GuiNpcStats extends GuiNPCInterface2 implements ITextfieldListener,
     	addLabel(new GuiNpcLabel(17,"stats.potionImmune", guiLeft + 5, y + 5));
     	addButton(new GuiNpcButtonYesNo(18, guiLeft + 217, y, 56, 20, stats.attackInvisible));
     	addLabel(new GuiNpcLabel(18,"stats.attackInvisible", guiLeft + 140, y + 5));
+    	
+    	addLabel(new GuiNpcLabel(666,"stats.purePercent", guiLeft + 140, y - 150));
+        addTextField(new GuiNpcTextField(666, this, fontRendererObj, guiLeft + 220, y -155, 50, 18, stats.purePercent+""));
+        getTextField(666).numbersOnly = true;
+        getTextField(666).setMinMaxDefault(-1, 100, -1);
     }	
     
 	@Override
@@ -92,6 +97,9 @@ public class GuiNpcStats extends GuiNPCInterface2 implements ITextfieldListener,
 		}
 		else if(textfield.id == 16){
 			stats.combatRegen = textfield.getInteger();
+		}else if(textfield.id == 666)
+		{
+			stats.purePercent = textfield.getInteger();
 		}
 	}
 	

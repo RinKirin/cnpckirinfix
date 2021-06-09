@@ -926,6 +926,7 @@ public abstract class EntityNPCInterface extends EntityCreature implements IEnti
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
+		this.hasDied = compound.getBoolean("isDieKirin");
 		npcVersion = compound.getInteger("ModRev");
 		VersionCompatibility.CheckNpcCompatibility(this, compound);
 		
@@ -933,6 +934,8 @@ public abstract class EntityNPCInterface extends EntityCreature implements IEnti
 		stats.readToNBT(compound);
 		ai.readToNBT(compound);
 		script.readFromNBT(compound);
+		
+		
 		
 		advanced.readToNBT(compound);
         if (advanced.role != EnumRoleType.None && roleInterface != null) 
@@ -960,6 +963,7 @@ public abstract class EntityNPCInterface extends EntityCreature implements IEnti
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
+		compound.setBoolean("isDieKirin", this.hasDied);
 		display.writeToNBT(compound);
 		stats.writeToNBT(compound);
 		ai.writeToNBT(compound);
@@ -974,6 +978,7 @@ public abstract class EntityNPCInterface extends EntityCreature implements IEnti
 		inventory.writeEntityToNBT(compound);
 		transform.writeToNBT(compound);
 
+		
 		compound.setLong("KilledTime", killedtime);
 		compound.setLong("TotalTicksAlive", totalTicksAlive);		
 		compound.setInteger("ModRev", npcVersion);
